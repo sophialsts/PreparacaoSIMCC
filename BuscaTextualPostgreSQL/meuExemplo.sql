@@ -1,30 +1,44 @@
+-- extensão para remover os acentos
 CREATE EXTENSION IF NOT EXISTS unaccent;
 
-CREATE TEXT SEARCH CONFIGURATION public.multi_unaccent (COPY = simple);
+-- configura para tirar acentos e fazer stemming
+DROP TEXT SEARCH CONFIGURATION IF EXISTS public.portuguese_unaccent;
+CREATE TEXT SEARCH CONFIGURATION public.portuguese_unaccent (COPY = pg_catalog.portuguese);
 
-ALTER TEXT SEARCH CONFIGURATION public.multi_unaccent
-    ALTER MAPPING FOR hword, hword_part, word
-    WITH unaccent;
+-- aplicar unnacent antes do stemming
+ALTER TEXT SEARCH CONFIGURATION public.portuguese_unaccent
+  ALTER MAPPING FOR hword, hword_part, word
+  WITH unaccent, portuguese_stem;
 
-ALTER TABLE Producoes ADD COLUMN IF NOT EXISTS documento_fts tsvector;
+-- confirmar que a coluna de documento_fts vai ser do tipo tsvector
+ALTER TABLE Producoes
+  ALTER COLUMN documento_fts TYPE tsvector
+  USING documento_fts::tsvector;
 
+-- vai atualizar a coluna com os lexemas de nome de artigo e nome, com peso maior para nome do de artigo
 UPDATE Producoes pr
-SET documento_fts =
-    setweight(to_tsvector('public.multi_unaccent', coalesce(pr.nomeartigo, '')), 'A') ||
-    setweight(to_tsvector('public.multi_unaccent', coalesce((SELECT p.nome FROM Pesquisadores p WHERE p.pesquisadores_id = pr.pesquisadores_id), '')), 'D');
+SET documento_fts = 
+    setweight(to_tsvector('public.portuguese_unaccent', coalesce(pr.nomeartigo, '')), 'A') ||
+    setweight(to_tsvector('public.portuguese_unaccent', coalesce(p.nome, '')), 'D')
+FROM Pesquisadores p
+WHERE p.pesquisadores_id = pr.pesquisadores_id;
 
-DROP INDEX IF EXISTS index_fts;
-CREATE INDEX index_fts ON Producoes USING gin(documento_fts);
+-- criar o índice GIN para documento_fts
+CREATE INDEX IF NOT EXISTS idx_producoes_documento_fts
+  ON Producoes
+  USING GIN (documento_fts);
 
+-- faz a busca e ordena em ordem decrescente
+-- websearch_to_tsquery aceita melhor as variações de palavras
 SELECT
     p.nome,
     pr.nomeartigo,
-    ts_rank_cd(pr.documento_fts, to_tsquery('public.multi_unaccent', 'eduardo & system')) AS rank
+    ts_rank_cd(pr.documento_fts, websearch_to_tsquery('public.portuguese_unaccent', 'eduard robótica')) AS rank
 FROM
     Pesquisadores p
 JOIN
     Producoes pr ON p.pesquisadores_id = pr.pesquisadores_id
 WHERE
-    pr.documento_fts @@ to_tsquery('public.multi_unaccent', 'eduardo & system')
+    pr.documento_fts @@ websearch_to_tsquery('public.portuguese_unaccent', 'eduard robótica')
 ORDER BY
     rank DESC;
