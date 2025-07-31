@@ -5,17 +5,17 @@ from banco import conexao_singleton as cs
 conexao = cs.Conexao().get_conexao()
 
 # Função para salvar um nova producao no banco de dados
-def salvar_nova_producao(producoes_id: str, pesquisadores_id: str, issn: str, nomeartigo: str ) -> str:
+def salvar_nova_producao(producoes_id: str, pesquisadores_id: str, issn: str, nomeartigo: str, anoartigo: int ) -> str:
     # SQL para inserir um novo registro na tabela "producoes"
     sql = """
-            INSERT INTO producoes (producoes_id, pesquisadores_id, issn, nomeartigo)
-            VALUES (%s, %s, %s, %s)
+            INSERT INTO producoes (producoes_id, pesquisadores_id, issn, nomeartigo, anoartigo)
+            VALUES (%s, %s, %s, %s, %s)
         """
     
     try:
         # Utiliza a conexão para abrir um cursor e executar o SQL
         with conexao.cursor() as cursor:
-            cursor.execute(sql, (producoes_id, pesquisadores_id, issn, nomeartigo))
+            cursor.execute(sql, (producoes_id, pesquisadores_id, issn, nomeartigo, anoartigo))
             # Confirma a transação no banco
             conexao.commit()
             
@@ -97,11 +97,3 @@ def apagar_por_producoes_id(producoes_id: str) -> str:
         conexao.rollback()
         return f"Erro ao apagar produção. Produção inexistente ou ID inválido."
     
-    '''
-    {
-    "producoes_id": "69096072-fe59-4bab-8f09-8effaa6cc5e7",
-    "pesquisadores_id": "8583e3d4-59e0-4361-956e-f0261641a013",
-    "issn": "25956825",
-    "nomeartigo": "Dinâmica de ensino baseada em fabricação digital e PBL para apoiar os professores de psicologia na apresentação do Teste de Pirâmide Colorida Pfister / Teaching dynamics based on digital fabrication and PBL to support psychology teachers in presenting the Pfister Color Pyramid Test",
-    "anoartigo": 2021
-  }'''

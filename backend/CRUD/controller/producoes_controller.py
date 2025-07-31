@@ -22,8 +22,8 @@ def adicionar(producoes: Producoes):
         
         producoes_id= producoes.producoes_id,
         pesquisadores_id = producoes.pesquisadores_id,
-        nomeartigo = producoes.nomeartigo,
         issn = producoes.issn,
+        nomeartigo = producoes.nomeartigo,
         anoartigo = producoes.anoartigo
         
     )
