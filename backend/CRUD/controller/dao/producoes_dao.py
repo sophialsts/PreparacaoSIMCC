@@ -83,7 +83,7 @@ def apagar_por_producoes_id(producoes_id: str) -> str:
         # Utiliza a conexão para abrir um cursor e executar o SQL
         with conexao.cursor() as cursor:
             
-            cursor.execute(sql, (producoes_id))
+            cursor.execute(sql, (producoes_id,))
             
             if (cursor.rowcount > 0):
                 # Confirma a transação no banco

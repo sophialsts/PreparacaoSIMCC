@@ -44,7 +44,6 @@ def listar():
 # Rota para apagar uma produção com base no producoes_id
 @producoes_router.delete("/producoes/{producoes_id}", response_model=str)
 def apagar(producoes_id: str):
-    print("chegou aqui")
     resposta = apagar_por_producoes_id(producoes_id)
     
     if 'inválido' in resposta:
