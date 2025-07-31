@@ -17,8 +17,8 @@ script_sql_criacao = """
         producoes_id UUID NOT NULL DEFAULT uuid_generate_v4(),
         pesquisadores_id UUID NOT NULL,
         issn VARCHAR(16) NOT NULL,
-        nomeArtigo VARCHAR(400) NOT NULL,
-        anoArtigo INTEGER NOT NULL,
+        nomeartigo VARCHAR(400) NOT NULL,
+        anoartigo INTEGER NOT NULL,
         PRIMARY KEY (producoes_id),
         CONSTRAINT fkey FOREIGN KEY (pesquisadores_id) 
         REFERENCES pesquisadores (pesquisadores_id) ON DELETE CASCADE

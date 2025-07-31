@@ -44,18 +44,18 @@ def listar_todas() -> str:
         return dados
 
 # Função para atualizar uma produção no banco de dados com base no "producoes_id"
-def atualizar_por_id(producoes_id: str, issn: str, nomeartigo: str, anoartigo: str, pesquisadores_id: str) -> str:
+def atualizar_por_id(nomeartigo: str, issn: str, pesquisadores_id: str, anoartigo: str, producoes_id: str) -> str:
     # SQL para atualizar os dados de uma produção específica
     sql = """
             UPDATE producoes
-            SET nomeartigo = %s, producoes_id = %s, issn = %s, pesquisadores_id = %s
+            SET nomeartigo = %s, issn = %s, pesquisadores_id = %s, anoartigo = %s
             WHERE producoes_id = %s
         """
     
     try:
         # Utiliza a conexão para abrir um cursor e executar o SQL
         with conexao.cursor() as cursor:
-            cursor.execute(sql, (producoes_id,issn,nomeartigo,anoartigo,pesquisadores_id))
+            cursor.execute(sql, (nomeartigo, issn, pesquisadores_id, anoartigo, producoes_id))
             
             if (cursor.rowcount < 0):
                 raise Exception()
@@ -96,3 +96,12 @@ def apagar_por_producoes_id(producoes_id: str) -> str:
         # Se ocorrer uma exceção, reverte a transação
         conexao.rollback()
         return f"Erro ao apagar produção. Produção inexistente ou ID inválido."
+    
+    '''
+    {
+    "producoes_id": "69096072-fe59-4bab-8f09-8effaa6cc5e7",
+    "pesquisadores_id": "8583e3d4-59e0-4361-956e-f0261641a013",
+    "issn": "25956825",
+    "nomeartigo": "Dinâmica de ensino baseada em fabricação digital e PBL para apoiar os professores de psicologia na apresentação do Teste de Pirâmide Colorida Pfister / Teaching dynamics based on digital fabrication and PBL to support psychology teachers in presenting the Pfister Color Pyramid Test",
+    "anoartigo": 2021
+  }'''

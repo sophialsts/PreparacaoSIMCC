@@ -13,8 +13,8 @@ from controller.dao.producoes_dao import (
 producoes_router = APIRouter()
 
 # Rota para salvar uma nova produção
-@producoes_router.get("/teste", response_model = str)
-def oi(): return "teste"
+''' @producoes_router.get("/teste", response_model = str)
+def oi(): return "teste" '''
 
 @producoes_router.post("/producoes", response_model = Producoes)
 def adicionar(producoes: Producoes):
@@ -22,8 +22,9 @@ def adicionar(producoes: Producoes):
         
         producoes_id= producoes.producoes_id,
         pesquisadores_id = producoes.pesquisadores_id,
-        nomeArtigo = producoes.nomeartigo,
-        issn = producoes.issn
+        nomeartigo = producoes.nomeartigo,
+        issn = producoes.issn,
+        anoartigo = producoes.anoartigo
         
     )
     
@@ -55,9 +56,11 @@ def apagar(producoes_id: str):
 @producoes_router.put("/producoes/{producoes_id}", response_model=Producoes)
 def atualizar(producoes_id: str, producoes: Producoes):
     resposta = atualizar_por_id(
-        nome = producoes.nome,
-        producoes_id = producoes.producoes_id,
-        producoes_id = producoes.lattes_id
+        nomeartigo = producoes.nomeartigo,
+        issn = producoes.issn,
+        anoartigo = producoes.anoartigo,
+        pesquisadores_id = producoes.pesquisadores_id,
+        producoes_id = producoes.producoes_id
     )
     
     if 'Erro' in resposta:
