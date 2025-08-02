@@ -4,8 +4,24 @@ from banco import conexao_singleton as cs
 # Obtém uma instância de conexão com o banco de dados
 conexao = cs.Conexao().get_conexao()
 
+def verificar_id_pesquisador(pesquisadores_id: str):
+        sql2 = """
+            SELECT * FROM pesquisadores
+            WHERE pesquisadores_id = %s
+        """
+        
+        with conexao.cursor() as cursor:
+            cursor.execute(sql2, (pesquisadores_id,))
+            resultado = cursor.fetchone()  
+        
+        return resultado is not None  
+
 # Função para salvar um nova producao no banco de dados
 def salvar_nova_producao(producoes_id: str, pesquisadores_id: str, issn: str, nomeartigo: str, anoartigo: int ) -> str:
+    
+    if not verificar_id_pesquisador(pesquisadores_id):
+        return "Erro: Pesquisador não encontrado"
+
     # SQL para inserir um novo registro na tabela "producoes"
     sql = """
             INSERT INTO producoes (producoes_id, pesquisadores_id, issn, nomeartigo, anoartigo)
