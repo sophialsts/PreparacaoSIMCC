@@ -14,8 +14,8 @@ export default function Menu() {
                 <MenuItem link="/pesquisadores">
                     Pesquisadores
                 </MenuItem>
-                <MenuItem link="/artigos">
-                    Artigos
+                <MenuItem link="/producoes">
+                    Produções
                 </MenuItem>
             </ul>
 

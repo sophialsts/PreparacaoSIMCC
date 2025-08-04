@@ -19,7 +19,6 @@ export default function Pesquisadores() {
                             <span className="text-lg font-semibold">Pesquisador: {pesquisador.nome}</span>
                             <span className="text-lg font-semibold">Pesquisador_id: {pesquisador.pesquisadores_id}</span>
                             <span className="text-lg font-semibold">ID Lattes: {pesquisador.lattes_id}</span>
-                            <span className="text-lg font-semibold">Artigos: {pesquisador.articles}</span>
                         </p>
                         <p className="indent-5 text-black">Sobre o pesquisador: {pesquisador.abstract}</p>
                     </li>
