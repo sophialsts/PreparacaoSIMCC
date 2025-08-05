@@ -1,5 +1,4 @@
 import { use } from "react";
-
 import { Pesquisador } from "@/core/pesquisadores";
 import getPesquisadores from "@/services/pesquisadores";
 
@@ -7,20 +6,36 @@ export default function Pesquisadores() {
     const pesquisadores = use(getPesquisadores());
 
     return (
-        <div>
-            <h1 className="text-2xl font-bold">Pesquisadores</h1>
-            <ul className="flex flex-col gap-3 mt-7">
+        <div className="p-4">
+            <h1 className="text-2xl font-bold mb-6">Pesquisadores</h1>
+            <ul className="space-y-4">
                 {pesquisadores.map((pesquisador: Pesquisador) => (
                     <li
-                        className="flex flex-col gap-3 bg-slate-300 px-3 py-2 rounded-md transition-all text-white"
+                        className="bg-white rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow"
                         key={pesquisador.lattes_id}
                     >
-                        <p className="flex justify-between items-center bg-slate-400 rounded-md p-2 mt-2">
-                            <span className="text-lg font-semibold">Pesquisador: {pesquisador.nome}</span>
-                            <span className="text-lg font-semibold">Pesquisador_id: {pesquisador.pesquisadores_id}</span>
-                            <span className="text-lg font-semibold">ID Lattes: {pesquisador.lattes_id}</span>
-                        </p>
-                        <p className="indent-5 text-black">Sobre o pesquisador: {pesquisador.abstract}</p>
+                        <div className="space-y-3">
+                            <h2 className="text-lg font-semibold text-gray-800">
+                                {pesquisador.nome}
+                            </h2>
+                            
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm text-gray-600">
+                                <div>
+                                    <span className="font-medium">ID Pesquisador:</span> {pesquisador.pesquisadores_id}
+                                </div>
+                                <div>
+                                    <span className="font-medium">ID Lattes:</span> {pesquisador.lattes_id}
+                                </div>
+                            </div>
+                            
+                            {pesquisador.abstract && (
+                                <div className="pt-2">
+                                    <p className="text-sm text-gray-700">
+                                        <span className="font-medium">Sobre o pesquisador:</span> {pesquisador.abstract}
+                                    </p>
+                                </div>
+                            )}
+                        </div>
                     </li>
                 ))}
             </ul>

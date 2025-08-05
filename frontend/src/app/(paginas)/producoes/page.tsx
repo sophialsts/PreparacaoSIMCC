@@ -1,5 +1,4 @@
 import { use } from "react";
-
 import { Producoes } from "@/core/producoes";
 import getProducoes from "@/services/producoes";
 
@@ -7,21 +6,36 @@ export default function Pesquisadores() {
     const pesquisadores = use(getProducoes());
 
     return (
-        <div>
-            <h1 className="text-2xl font-bold">Produções</h1>
-            <ul className="flex flex-col gap-3 mt-7">
+        <div className="p-4">
+            <h1 className="text-2xl font-bold mb-6">Produções</h1>
+            <ul className="space-y-4">
                 {pesquisadores.map((producao: Producoes) => (
                     <li
-                        className="flex flex-col gap-3 bg-slate-300 px-3 py-2 rounded-md transition-all text-white"
+                        className="bg-white rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow"
                         key={producao.producoes_id}
                     >
-                        <p className="flex justify-between items-center bg-slate-400 rounded-md p-2 mt-2">
-                            <span className="text-lg font-semibold">Nome do artigo: {producao.nomeartigo}</span>
-                            <span className="text-lg font-semibold">Pesquisador_id: {producao.pesquisadores_id}</span>
-                            <span className="text-lg font-semibold">ISSN: {producao.issn}</span>
-                            <span className="text-lg font-semibold">ID Produção: {producao.producoes_id}</span>
-                            <span className="text-lg font-semibold">Ano do artigo: {producao.anoartigo}</span>
-                        </p>
+                        <div className="space-y-3">
+                            <h2 className="text-lg font-semibold text-gray-800">
+                                {producao.nomeartigo}
+                            </h2>
+                            
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm text-gray-600">
+                                <div>
+                                    <span className="font-medium">ID Pesquisador:</span> {producao.pesquisadores_id}
+                                </div>
+                                {producao.producoes_id && (
+                                    <div>
+                                        <span className="font-medium">ID Produção:</span> {producao.producoes_id}
+                                    </div>
+                                )}
+                                <div>
+                                    <span className="font-medium">ISSN:</span> {producao.issn}
+                                </div>
+                                <div>
+                                    <span className="font-medium">Ano:</span> {producao.anoartigo}
+                                </div>
+                            </div>
+                        </div>
                     </li>
                 ))}
             </ul>
