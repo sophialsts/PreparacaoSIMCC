@@ -5,7 +5,7 @@ export default function Cabecalho() {
         <header
             className="
                 flex justify-between items-center
-                px-6 py-3 bg-zinc-300
+                px-6 py-3 bg-zinc-500
             "
         >
             <h1 className="text-2xl">Pesquisadores NPAI</h1>
